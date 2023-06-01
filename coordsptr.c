@@ -55,7 +55,7 @@ int main(){
     DynamicList* point_list_ptr = createDynamicList(sizeof(Point*));   
     DynamicList* line_list_ptr = createDynamicList(sizeof(Line*));
 
-    int ask_user = 1;
+    int ask_user = 0;
     int resolution_x = 50, resolution_y = 50;
     char choice;
 
@@ -83,6 +83,8 @@ int main(){
         freeMemory(grid_ptr, point_list_ptr, line_list_ptr);
     }
 
+
+    printf("hi");
     /*
     createGrid(grid_ptr, resolution_x, resolution_y);
 

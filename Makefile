@@ -10,5 +10,5 @@ dynamiclist.o: dynamiclist.c dynamiclist.h
 grid.o: grid.c grid.h
 	gcc grid.c -c -Wall -Wextra -Wvla
 
-clear:
+clean:
 	rm *.o
