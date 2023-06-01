@@ -27,7 +27,6 @@ typedef struct Line
 
 
 
-// Function Declarations
 
 void doAction(Grid* grid, DynamicList* point_list, DynamicList* line_list, char choice);
 
