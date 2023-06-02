@@ -118,7 +118,7 @@ void doAction(Grid* grid, DynamicList* point_list, DynamicList* line_list, char 
         printf("y-coord: ");
         scanf("%d", &y1);
         if(inBounds(grid, x1, y1)){
-            addItem(point_list, createPoint(x1, y1, NO_LINE));
+            addItemDynamicList(point_list, createPoint(x1, y1, NO_LINE));
             strcpy(message, "Point added successfully!");
         }
         else{
@@ -165,7 +165,7 @@ void doAction(Grid* grid, DynamicList* point_list, DynamicList* line_list, char 
                     printf("Enter the number of the point you want to remove: ");
                     scanf("%d", &temp);
                     if (temp <= point_list->size){
-                        removeItems(point_list, temp - 1, 1);
+                        removeItemsDynamicList(point_list, temp - 1, 1);
                         strcpy(message, "Point removed succesfully!");
                     }
                     else{
@@ -265,7 +265,7 @@ void drawLine(DynamicList* point_list, DynamicList* line_list, int x1, int y1, i
         end_point = createPoint(x2, y2, IN_LINE);
         line = createLine(start_point, end_point);
 
-        addItem(point_list, start_point);
+        addItemDynamicList(point_list, start_point);
         line->length++;
 
         for(x = x1 + 1; x < x2; x++){
@@ -274,11 +274,11 @@ void drawLine(DynamicList* point_list, DynamicList* line_list, int x1, int y1, i
                 y += adjust;
                 offset -= abs(run) * 2;
             }
-            addItem(point_list, createPoint(x, y, IN_LINE));
+            addItemDynamicList(point_list, createPoint(x, y, IN_LINE));
             line->length++;
         }
 
-        addItem(point_list, end_point);
+        addItemDynamicList(point_list, end_point);
         line->length++;
     }
 
@@ -298,7 +298,7 @@ void drawLine(DynamicList* point_list, DynamicList* line_list, int x1, int y1, i
         end_point = createPoint(x2, y2, IN_LINE);
         line = createLine(start_point, end_point);
 
-        addItem(point_list, start_point);
+        addItemDynamicList(point_list, start_point);
         line->length++;
 
         for(y = y1 + 1; y < y2; y++){
@@ -307,23 +307,23 @@ void drawLine(DynamicList* point_list, DynamicList* line_list, int x1, int y1, i
                 x += adjust;
                 offset -= abs(rise) * 2;
             }
-            addItem(point_list, createPoint(x, y, IN_LINE));
+            addItemDynamicList(point_list, createPoint(x, y, IN_LINE));
             line->length++;
         }
 
-        addItem(point_list, end_point);
+        addItemDynamicList(point_list, end_point);
         line->length++;
     }
 
-    addItem(line_list, line);
+    addItemDynamicList(line_list, line);
 }
 
 
 // Removes all the points that belong to the given line
 void removeLine(DynamicList* point_list, DynamicList* line_list, int index){
-    removeItems(point_list, getIndex(point_list, ((Line*)line_list->items[index])->start_point), 
+    removeItemsDynamicList(point_list, getIndexDynamicList(point_list, ((Line*)line_list->items[index])->start_point), 
                                                 ((Line*)line_list->items[index])->length);
-    removeItems(line_list, index, 1);
+    removeItemsDynamicList(line_list, index, 1);
 }
 
 

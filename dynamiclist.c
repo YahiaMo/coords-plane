@@ -33,7 +33,7 @@ void freeDynamicList(DynamicList* list){
 
 
 // Returns the index of the given item inside the given DynamicList
-int getIndex(DynamicList* list, void* item){
+int getIndexDynamicList(DynamicList* list, void* item){
     int i;
     for (i = 0; i < list->size; i++){
         if (list->items[i] == item){
@@ -45,7 +45,7 @@ int getIndex(DynamicList* list, void* item){
 
 
 // Adds the given item to the end of the given DynamicList
-void addItem(DynamicList* list, void* item){
+void addItemDynamicList(DynamicList* list, void* item){
     list->size++;
     if (list->items == NULL){
         list->items = malloc(list->item_size);
@@ -57,7 +57,7 @@ void addItem(DynamicList* list, void* item){
 }
 
 
-void shiftItems(DynamicList* list, int index, int shift_amount){
+void shiftItemsDynamicList(DynamicList* list, int index, int shift_amount){
     int i;
     for (i = index; i < list->size - shift_amount; i++){
         list->items[i] = list->items[i + shift_amount];
@@ -66,12 +66,12 @@ void shiftItems(DynamicList* list, int index, int shift_amount){
 
 
 // Removes the specified number items starting at the given index from the given DynamicList
-void removeItems(DynamicList* list, int index, int remove_amount){
+void removeItemsDynamicList(DynamicList* list, int index, int remove_amount){
     int i;
     for (i = index; i < index + remove_amount; i++){
         free(list->items[i]);
     }
-    shiftItems(list, index, remove_amount);
+    shiftItemsDynamicList(list, index, remove_amount);
     list->size -= remove_amount;
     list->items = realloc(list->items, list->size * list->item_size);
 }

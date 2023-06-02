@@ -13,13 +13,13 @@ void clearDynamicList(DynamicList* list);
 
 void freeDynamicList(DynamicList* list);
 
-int getIndex(DynamicList* list, void* item);
+int getIndexDynamicList(DynamicList* list, void* item);
 
-void addItem(DynamicList* list, void* item);
+void addItemDynamicList(DynamicList* list, void* item);
 
-void shiftItems(DynamicList* list, int index, int shift_amount);
+void shiftItemsDynamicList(DynamicList* list, int index, int shift_amount);
 
-void removeItems(DynamicList* list, int index, int remove_amount);
+void removeItemsDynamicList(DynamicList* list, int index, int remove_amount);
 
 
 
