@@ -7,16 +7,13 @@
 #define IN_LINE 1
 #define NO_LINE 0
 
-//gcc coordsptr.c -o coordsptr -Wall -Wextra -Wvla
-
-//wt -p "Ubuntu" `; split-pane -p "Windows Powershell" -V `; split-pane -p "Git Bash" -H -s .6`; mf first
 
 // Character used to display a point on the plane
 const char point_char = 'x';
 
 typedef struct Point {
     int x, y, line_state;  // line_state has 2 possible values
-} Point;                   // (1: point belongs to a line, 0: point does not belong to a line)
+} Point;                   // (1 or IN_LINE: point belongs to a line, 0 or NO_LINE: point does not belong to a line)
 
 typedef struct Line
 {
@@ -55,8 +52,8 @@ int main(){
     DynamicList* point_list_ptr = createDynamicList(sizeof(Point*));   
     DynamicList* line_list_ptr = createDynamicList(sizeof(Line*));
 
-    int ask_user = 0;
-    int resolution_x = 50, resolution_y = 50;
+    int ask_user = 1; // Toggles the UI
+    int resolution_x, resolution_y;
     char choice;
 
     if(ask_user){
@@ -83,25 +80,8 @@ int main(){
         freeMemory(grid_ptr, point_list_ptr, line_list_ptr);
     }
 
-
-    printf("hi");
-    /*
-    createGrid(grid_ptr, resolution_x, resolution_y);
-
-    drawGrid(grid_ptr);
-
-    int x, y;
-    for(x = -1 * (grid.resolution_x/2); x < (grid.resolution_x/2); x++){
-        y = round(20 * sin(0.2 * x));
-        drawPoint(grid_ptr, x, y);
-    }
-
-    printf("\n\n%d", point_list.items[0]->y);
-    */
-
     return 0;
 }
-
 
 
 // Does the correct action based on user choice
@@ -327,7 +307,7 @@ void removeLine(DynamicList* point_list, DynamicList* line_list, int index){
 }
 
 
-// Adds all the items in the given DynamicList to the given Grid
+// Adds all the Points in the given DynamicList to the given Grid
 void renderAllPoints(Grid* grid, DynamicList* point_list){
     int i;
     for (i = 0; i < point_list->size; i++){
@@ -336,7 +316,7 @@ void renderAllPoints(Grid* grid, DynamicList* point_list){
 }
 
 
-// Prints independent points in the given list
+// Prints the coordinates of the points in the given list
 void printPoints(DynamicList* point_list){
     printf("\nPoints:\n");
     int i;
@@ -369,7 +349,7 @@ void printLines(DynamicList* line_list){
 }
 
 
-// Prints out all the points in the given point list
+// Prints out the coords of all the points and lines in the given lists
 void printPointList(DynamicList* point_list, DynamicList* line_list){
     printPoints(point_list);
     printLines(line_list);

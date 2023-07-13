@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// Allocates memory and fills the grid with the correct chars
+// Creates a new Grid structure and returns a pointer to it
 Grid* createGrid(int resolution_x, int resolution_y){
 
     Grid* grid = malloc(sizeof(Grid));
@@ -33,7 +33,7 @@ int getYCoord(Grid* grid, int real_coord){
 }
 
 
-// Clears all points from the grid
+// Clears all points from the grid (Fills it with empty cells)
 void clearGrid(Grid* grid){
     int y, x;
     for(y = 0; y < grid->resolution_y; y++){
@@ -49,16 +49,6 @@ void clearGrid(Grid* grid){
             }
         }
     }
-}
-
-
-void freeGrid(Grid* grid){
-    int i;
-    for (i = 0; i < grid->resolution_y; i++){
-        free(grid->arr[i]);
-    }
-    free(grid->arr);
-    free(grid);
 }
 
 
@@ -110,4 +100,15 @@ void drawPoint(Grid* grid, int x, int y, char draw_char){
     if(inBounds(grid, x, y)){
         grid->arr[getYCoord(grid, y)][getXCoord(grid, x)] = draw_char;
     }
+}
+
+
+// Frees memory of the points array and grid structure
+void freeGrid(Grid* grid){
+    int i;
+    for (i = 0; i < grid->resolution_y; i++){
+        free(grid->arr[i]);
+    }
+    free(grid->arr);
+    free(grid);
 }

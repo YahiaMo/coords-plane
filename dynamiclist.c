@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 
-// Creates a new DynamicList that stores items of the given size
+// Creates a new DynamicList structure that stores items of the given size and returns a pointer to it
 DynamicList* createDynamicList(int item_size){
     DynamicList* list = malloc(sizeof(DynamicList));
     list->size = 0;
