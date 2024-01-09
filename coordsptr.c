@@ -3,46 +3,21 @@
 #include <string.h>
 #include "dynamiclist.h"
 #include "grid.h"
+#include "coords.h"
 
-#define IN_LINE 1
-#define NO_LINE 0
 
 
 // Character used to display a point on the plane
 const char point_char = 'x';
-
-typedef struct Point {
-    int x, y, line_state;  // line_state has 2 possible values
-} Point;                   // (1 or IN_LINE: point belongs to a line, 0 or NO_LINE: point does not belong to a line)
-
-typedef struct Line
-{
-    Point* start_point;
-    Point* end_point;
-    int length;
-} Line;
-
 
 
 // Function Declarations
 
 void doAction(Grid* grid, DynamicList* point_list, DynamicList* line_list, char choice);
 
-Point* createPoint(int x, int y, int line_state);
-
-Line* createLine(Point* start_point, Point* end_point);
-
-void drawLine(DynamicList* point_list, DynamicList* line_list, int x1, int y1, int x2, int y2);
-
-void removeLine(DynamicList* point_list, DynamicList* line_list, int index);
-
-void renderAllPoints(Grid* grid, DynamicList* point_list);
-
 void printPoints(DynamicList* point_list);
 
 void printLines(DynamicList* line_list);
-
-void printPointList(DynamicList* point_list, DynamicList* line_list);
 
 void freeMemory(Grid* grid, DynamicList* point_list, DynamicList* line_list);
 
@@ -128,7 +103,7 @@ void doAction(Grid* grid, DynamicList* point_list, DynamicList* line_list, char 
     case 'g':
         system("cls||clear");
         clearGrid(grid);
-        renderAllPoints(grid, point_list);
+        renderAllPoints(grid, point_list, point_char);
         drawGrid(grid);
         if (point_list->size > 0){printPoints(point_list);};
         if (line_list->size > 0){printLines(line_list);};
@@ -190,132 +165,6 @@ void doAction(Grid* grid, DynamicList* point_list, DynamicList* line_list, char 
 }
 
 
-// Creates a new Point structure and returns a pointer to it
-Point* createPoint(int x, int y, int line_state){
-    Point* point = malloc(sizeof(Point));
-    point->x = x;
-    point->y = y;
-    point->line_state = line_state;
-    return point;
-}
-
-
-// Creates a new Point structure and returns a pointer to it
-Line* createLine(Point* start_point, Point* end_point){
-    Line* line = malloc(sizeof(Line));
-    line->start_point = start_point;
-    line->end_point = end_point;
-    line->length = 0;
-    return line;
-}
-
-
-// Bresenham's line algorithm
-void drawLine(DynamicList* point_list, DynamicList* line_list, int x1, int y1, int x2, int y2){
-
-    int rise = y2 - y1;
-    int run = x2 - x1;
-    float m = (float) rise / run;
-
-    int y = y1;
-    int x = x1;
-
-    int adjust = (m < 0) ? -1 : 1;
-    int offset = 0;
-    int threshold;
-    int temp;
-
-    Point* start_point = NULL;
-    Point* end_point = NULL;
-    Line* line = NULL;
-
-    // Case of  rise / run
-    if (m <= 1 && m >= -1){ 
-        threshold =  abs(run);  // 0.5 * 2 * abs(run)
-
-        if (x1 > x2){
-            temp = x1;
-            x1 = x2;
-            x2 = temp;
-            y = y2;
-            y2 = y1;
-        }
-
-        start_point = createPoint(x1, y, IN_LINE);
-        end_point = createPoint(x2, y2, IN_LINE);
-        line = createLine(start_point, end_point);
-
-        addItemDynamicList(point_list, start_point);
-        line->length++;
-
-        for(x = x1 + 1; x < x2; x++){
-            offset += abs(rise) * 2;  // abs(rise/run) * abs(run) * 2
-            if (offset >= threshold){
-                y += adjust;
-                offset -= abs(run) * 2;
-            }
-            addItemDynamicList(point_list, createPoint(x, y, IN_LINE));
-            line->length++;
-        }
-
-        addItemDynamicList(point_list, end_point);
-        line->length++;
-    }
-
-    // Case of  run / rise
-    else{
-        threshold =  abs(rise);  // 0.5 * 2 * abs(rise)
-
-        if (y1 > y2){
-            temp = y1;
-            y1 = y2;
-            y2 = temp;
-            x = x2;
-            x2 = x1;
-        }
-
-        start_point = createPoint(x, y1, IN_LINE);
-        end_point = createPoint(x2, y2, IN_LINE);
-        line = createLine(start_point, end_point);
-
-        addItemDynamicList(point_list, start_point);
-        line->length++;
-
-        for(y = y1 + 1; y < y2; y++){
-            offset += abs(run) * 2;  // abs(run/rise) * abs(rise) * 2
-            if (offset >= threshold){
-                x += adjust;
-                offset -= abs(rise) * 2;
-            }
-            addItemDynamicList(point_list, createPoint(x, y, IN_LINE));
-            line->length++;
-        }
-
-        addItemDynamicList(point_list, end_point);
-        line->length++;
-    }
-
-    addItemDynamicList(line_list, line);
-}
-
-
-// Removes all the points that belong to the given line
-void removeLine(DynamicList* point_list, DynamicList* line_list, int index){
-    removeItemsDynamicList(point_list, getIndexDynamicList(point_list, ((Line*)line_list->items[index])->start_point), 
-                                                ((Line*)line_list->items[index])->length);
-    removeItemsDynamicList(line_list, index, 1);
-}
-
-
-// Adds all the Points in the given DynamicList to the given Grid
-void renderAllPoints(Grid* grid, DynamicList* point_list){
-    int i;
-    for (i = 0; i < point_list->size; i++){
-        drawPoint(grid, ((Point*)point_list->items[i])->x, ((Point*)point_list->items[i])->y, point_char);
-    }
-}
-
-
 // Prints the coordinates of the points in the given list
 void printPoints(DynamicList* point_list){
     printf("\nPoints:\n");
@@ -346,13 +195,6 @@ void printLines(DynamicList* line_list){
         ((Line*)line_list->items[i])->length);
     }
     printf("\n");
-}
-
-
-// Prints out the coords of all the points and lines in the given lists
-void printPointList(DynamicList* point_list, DynamicList* line_list){
-    printPoints(point_list);
-    printLines(line_list);
 }
 
 
